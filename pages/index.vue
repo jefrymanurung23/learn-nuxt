@@ -1,39 +1,41 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        learn-nuxt
-      </h1>
-      <h2 class="subtitle">
-        Learn {{ name }}
-      </h2>
-      <div class="links">
-        <nuxt-link to="/videos" class="button--green">
-          Videos
-        </nuxt-link>
-        <nuxt-link to="/about" class="button--grey">
-          About
-        </nuxt-link>
+  <div>
+    <div class="home">
+      <div class="display-4 ma-4 d-flex jutify-center">
+        All Videos
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap">
+      <div v-for="video in videos" :key="video.name">
+        <VideoListVideo :video="video" :tags="tags" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import VideoListVideo from '../components/VideoListVideo'
 
 export default {
   components: {
-    Logo
+    VideoListVideo
   },
-  asyncData () {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line nuxt/no-timing-in-fetch-data
-      setTimeout(function () {
-        resolve({ name: 'Nuxt' })
-      }, 1000)
+  async asyncData ({ $axios }) {
+    const response = await $axios.get('/videos')
+    const response2 = await $axios.get('/tags')
+    const videos = response.data.data
+
+    videos.forEach((v) => {
+      v.tag_ids = v.tags.map(t => t.id)
     })
+
+    const tags = response2.data.data
+
+    return {
+      videos,
+      tags
+    }
   }
   // menambahkan title page
   // head () {
@@ -45,34 +47,4 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>

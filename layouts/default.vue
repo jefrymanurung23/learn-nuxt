@@ -9,9 +9,9 @@
       </v-btn>
     </v-app-bar>
 
-    <v-content id="default-body">
+    <v-main id="default-body">
       <nuxt />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
