@@ -50,7 +50,7 @@
 <script>
 import 'video.js/dist/video-js.css'
 import Vue from 'vue'
-// import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 // If used in nuxt.js/ssr, you should keep it only in browser build environment
 if (process.browser) {
@@ -59,36 +59,19 @@ if (process.browser) {
 }
 
 export default {
-  async asyncData ({ $axios }) {
-    const response = await $axios.get('/videos')
-    const videos = response.data.data
-    videos.forEach((v) => {
-      v.attributes.tag_ids = v.relationships.tags.data.map(t => t.id)
-    })
-
-    const tags = response.data.included
-    tags.forEach((t) => {
-      t.attributes.id = t.id
-    })
-
-    return {
-      videos: videos.map(v => v.attributes),
-      tags: tags.map(t => t.attributes)
-    }
+  async fetch ({ store, params }) {
+    await store.dispatch('loadOneVideo', {videoId: params.id})
   },
   computed: {
-    video () {
-      // eslint-disable-next-line eqeqeq
-      return this.videos.find(vid => vid.id == this.$route.params.id) || {}
-    },
     // ...mapGetters({
     //   getTag: 'tags/get',
     //   isPlayed: 'users/videoIsPlayed'
     // }),
-    // ...mapState({
-    //   videos: state => state.videos.videos,
-    //   currentUser: state => state.users.currentUser
-    // }),
+    ...mapState(['videos', 'tags']),
+    video () {
+      // eslint-disable-next-line eqeqeq
+      return this.videos.find(v => v.id == this.$route.params.id)
+    },
     playerOptions () {
       return {
         language: 'en',

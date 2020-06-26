@@ -7,7 +7,7 @@
     </div>
 
     <div class="d-flex flex-wrap justify-center">
-      <div v-for="video in videosOnTag" :key="video.name">
+      <div v-for="video in videos" :key="video.id">
         <VideoListVideo :video="video" :tags="tags" />
       </div>
     </div>
@@ -15,30 +15,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import VideoListVideo from '@/components/VideoListVideo'
 
 export default {
   components: {
     VideoListVideo
   },
-  async asyncData ({ $axios, params }) {
-    const response = await $axios.get(`/tags/${params.id}`)
-    const tag = response.data.data
-
-    const videosOnTag = response.data.included.filter(i => i.type === 'video')
-    videosOnTag.forEach((v) => {
-      v.attributes.tag_ids = v.relationships.tags.data.map(t => t.id)
-    })
-
-    const tags = response.data.included.filter(i => i.type === 'tag')
-    tags.forEach((t) => {
-      t.attributes.id = t.id
-    })
-
-    return {
-      tag: tag.attributes,
-      videosOnTag: videosOnTag.map(vid => vid.attributes),
-      tags: tags.map(t => t.attributes)
+  async fetch ({ store, params }) {
+    await store.dispatch('loadTagAndRelationships', { tagId: params.id })
+  },
+  computed: {
+    ...mapState(['videos', 'tags']),
+    tag () {
+      // eslint-disable-next-line eqeqeq
+      return this.tags.find(v => v.id == this.$route.params.id)
     }
   }
 }
