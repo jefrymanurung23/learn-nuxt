@@ -35,7 +35,7 @@
           :key="tag_id"
         >
           <v-btn
-            :to="{ name: 'tag', params: { id: tag_id }}"
+            :to="`/tags/${tag_id}`"
             color="green lighten-2"
             class="mr-1 mb-2"
           >
@@ -61,18 +61,19 @@ if (process.browser) {
 export default {
   async asyncData ({ $axios }) {
     const response = await $axios.get('/videos')
-    const response2 = await $axios.get('/tags')
     const videos = response.data.data
-
     videos.forEach((v) => {
-      v.tag_ids = v.tags.map(t => t.id)
+      v.attributes.tag_ids = v.relationships.tags.data.map(t => t.id)
     })
 
-    const tags = response2.data.data
+    const tags = response.data.included
+    tags.forEach((t) => {
+      t.attributes.id = t.id
+    })
 
     return {
-      videos,
-      tags
+      videos: videos.map(v => v.attributes),
+      tags: tags.map(t => t.attributes)
     }
   },
   computed: {

@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="home">
-      <div class="display-4 ma-4 d-flex jutify-center">
+      <div class="display-4 ma-4 d-flex justify-center">
         All Videos
       </div>
     </div>
 
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap justify-center">
       <div v-for="video in videos" :key="video.name">
         <VideoListVideo :video="video" :tags="tags" />
       </div>
@@ -23,18 +23,20 @@ export default {
   },
   async asyncData ({ $axios }) {
     const response = await $axios.get('/videos')
-    const response2 = await $axios.get('/tags')
-    const videos = response.data.data
 
+    const videos = response.data.data
     videos.forEach((v) => {
-      v.tag_ids = v.tags.map(t => t.id)
+      v.attributes.tag_ids = v.relationships.tags.data.map(t => t.id)
     })
 
-    const tags = response2.data.data
+    const tags = response.data.included
+    tags.forEach((t) => {
+      t.attributes.id = t.id
+    })
 
     return {
-      videos,
-      tags
+      videos: videos.map(v => v.attributes),
+      tags: tags.map(t => t.attributes)
     }
   }
   // menambahkan title page

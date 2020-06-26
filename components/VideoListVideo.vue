@@ -7,7 +7,8 @@
         class="ma-2 pa-6 transition-swing"
         :to="`/watch/${video.id}`"
       >
-        <v-img :src="video.thumbnail" />
+        <v-img v-if="video.thumbnail != null" :src="video.thumbnail" />
+        <v-img v-else :src="`https://vue-screencasts.s3.us-east-2.amazonaws.com/video-files/Series%3A+Building+a+VueJS+App/Thumbnails/Building+a+VueJS+app+part+1.png`" />
         <v-card-title>{{ video.name }}</v-card-title>
         <v-card-text>
           <!-- <div v-if="isPlayed(video.id)" class="green--text">
@@ -22,9 +23,9 @@
               color="green lighten-2"
               class="mr-2"
               small
+              :to="`/tags/${tag_id}`"
               @mousedown.stop
             >
-              <!-- :to="{ name: 'tag', params: {id: tag_id} }" -->
               {{ getTag(tag_id).name }}
             </v-btn>
           </span>
