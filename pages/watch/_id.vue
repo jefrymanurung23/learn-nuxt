@@ -59,9 +59,14 @@ if (process.browser) {
 }
 
 export default {
-  async fetch ({ store, params }) {
-    await store.dispatch('loadOneVideo', {videoId: params.id})
-  },
+  // async fetch ({ store, params, from }) {
+  //   const isInitialPageLoad = !from
+
+  //   if (isInitialPageLoad) {
+  //     await store.dispatch('loadAllVideos')
+  //     await store.dispatch('loadAllTags')
+  //   }
+  // },
   computed: {
     // ...mapGetters({
     //   getTag: 'tags/get',

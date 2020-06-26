@@ -17,39 +17,44 @@ export const actions = {
     const { data: videos, included: tags } = await getData('/videos', this.$axios) // grabing data
 
     deserializeVideos(videos) // deserialize
-    deserializeTags(tags)
-
     commit('SET_VIDEOS', videos.map(v => v.attributes)) // commit
-    commit('SET_TAGS', tags.map(t => t.attributes))
   },
 
-  async loadOneVideo ({ commit }, { videoId }) {
-    const { data: video, included: tags } = await getData(`/videos/${videoId}`, this.$axios)
+  async loadAllTags ({ commit }) {
+    const { data: tags } = await getData('/tags', this.$axios) // grabing data
 
-    deserializeVideos([video])
     deserializeTags(tags)
-
-    commit('SET_VIDEOS', [video.attributes])
-    commit('SET_TAGS', tags.map(t => t.attributes))
-  },
-
-  async loadTagAndRelationships ({ commit }, { tagId }) {
-    const { included } = await getData(`/tags/${tagId}`, this.$axios)
-
-    const videosOnTag = included.filter(i => i.type === 'video')
-    deserializeVideos(videosOnTag)
-
-    const tags = included.filter(i => i.type === 'tag')
-    deserializeTags(tags)
-
-    commit('SET_VIDEOS', videosOnTag.map(vid => vid.attributes))
     commit('SET_TAGS', tags.map(t => t.attributes))
   }
+
+  // async loadOneVideo ({ commit }, { videoId }) {
+  //   const { data: video, included: tags } = await getData(`/videos/${videoId}`, this.$axios)
+
+  //   deserializeVideos([video])
+  //   deserializeTags(tags)
+
+  //   commit('SET_VIDEOS', [video.attributes])
+  //   commit('SET_TAGS', tags.map(t => t.attributes))
+  // },
+
+  // async loadTagAndRelationships ({ commit }, { tagId }) {
+  //   const { included } = await getData(`/tags/${tagId}`, this.$axios)
+
+  //   const videosOnTag = included.filter(i => i.type === 'video')
+  //   deserializeVideos(videosOnTag)
+
+  //   const tags = included.filter(i => i.type === 'tag')
+  //   deserializeTags(tags)
+
+  //   commit('SET_VIDEOS', videosOnTag.map(vid => vid.attributes))
+  //   commit('SET_TAGS', tags.map(t => t.attributes))
+  // }
 }
 
 const deserializeTags = function (tags) {
   tags.forEach((t) => {
     t.attributes.id = t.id
+    t.attributes.video_ids = t.relationships.videos.data.map(vid => vid.id)
   })
 }
 

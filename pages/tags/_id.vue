@@ -7,7 +7,7 @@
     </div>
 
     <div class="d-flex flex-wrap justify-center">
-      <div v-for="video in videos" :key="video.id">
+      <div v-for="video in videosOnTag" :key="video.id">
         <VideoListVideo :video="video" :tags="tags" />
       </div>
     </div>
@@ -22,11 +22,21 @@ export default {
   components: {
     VideoListVideo
   },
-  async fetch ({ store, params }) {
-    await store.dispatch('loadTagAndRelationships', { tagId: params.id })
-  },
+  // async fetch ({ store, params, from }) {
+  //   const isInitialPageLoad = !from
+
+  //   if (isInitialPageLoad) {
+  //     await store.dispatch('loadAllVideos')
+  //     await store.dispatch('loadAllTags')
+  //   }
+  // },
   computed: {
     ...mapState(['videos', 'tags']),
+    videosOnTag () {
+      return this.videos.filter((v) => {
+        return this.tag.video_ids.includes(v.id.toString())
+      })
+    },
     tag () {
       // eslint-disable-next-line eqeqeq
       return this.tags.find(v => v.id == this.$route.params.id)

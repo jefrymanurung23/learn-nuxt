@@ -22,9 +22,14 @@ export default {
   components: {
     VideoListVideo
   },
-  async fetch ({ store }) {
-    await store.dispatch('loadAllVideos')
-  },
+  // async fetch ({ store, from }) {
+  //   const isInitialPageLoad = !from
+
+  //   if (isInitialPageLoad) {
+  //     await store.dispatch('loadAllVideos')
+  //     await store.dispatch('loadAllTags')
+  //   }
+  // },
   computed: {
     ...mapState(['videos', 'tags'])
   }
