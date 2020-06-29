@@ -72,7 +72,10 @@ export default {
     //   getTag: 'tags/get',
     //   isPlayed: 'users/videoIsPlayed'
     // }),
-    ...mapState(['videos', 'tags']),
+    ...mapState({
+      videos: state => state.videos.videos,
+      tags: state => state.tags.tags
+    }),
     video () {
       // eslint-disable-next-line eqeqeq
       return this.videos.find(v => v.id == this.$route.params.id)

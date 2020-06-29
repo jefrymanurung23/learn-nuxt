@@ -4,19 +4,41 @@
       <v-btn text to="/">
         Home
       </v-btn>
-      <v-btn text to="/videos">
-        Videos
+      <v-btn text to="/admin/videos">
+        Admin
       </v-btn>
     </v-app-bar>
 
     <v-main id="default-body">
       <nuxt />
     </v-main>
+
+    <v-snackbar
+      v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+      :key="snackbar.text + Math.random()"
+      v-model="snackbar.showing"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      :style="`bottom: ${(index * 60) + 8}px`"
+    >
+      {{ snackbar.text }}
+
+      <v-btn text @click="snackbar.showing = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  computed: {
+    ...mapState({
+      snackbars: state => state.snackbar.snackbars
+    })
+  },
   middleware: 'load-videos-and-tags'
 }
 </script>

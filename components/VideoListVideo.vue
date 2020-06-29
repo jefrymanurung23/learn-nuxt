@@ -19,17 +19,19 @@
             </div> -->
           </v-card-text>
           <v-card-actions>
-            <span v-for="tag_id in video.tag_ids" :key="`${video.id}-${tag_id}`">
-              <v-btn
-                color="green lighten-2"
-                class="mr-2"
-                small
-                :to="`/tags/${tag_id}`"
-                @mousedown.stop
-              >
-                {{ getTag(tag_id).name }}
-              </v-btn>
-            </span>
+            <div class="d-flex flex-wrap">
+              <span v-for="tag_id in video.tag_ids" :key="`${video.id}-${tag_id}`" class="mb-3">
+                <v-btn
+                  color="green lighten-2"
+                  class="mr-2"
+                  small
+                  :to="`/tags/${tag_id}`"
+                  @mousedown.stop
+                >
+                  {{ getTag(tag_id).name }}
+                </v-btn>
+              </span>
+            </div>
           </v-card-actions>
         </v-card>
       </template>

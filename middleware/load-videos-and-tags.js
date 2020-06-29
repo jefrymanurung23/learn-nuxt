@@ -6,8 +6,8 @@ export default async function ({ store, from }) {
   if (isInitialPageLoad) {
     // eslint-disable-next-line import/no-named-as-default-member
     await RSVP.all([
-      store.dispatch('loadAllVideos'),
-      store.dispatch('loadAllTags')
+      store.dispatch('videos/loadAll'),
+      store.dispatch('tags/loadAll')
     ])
   }
 }

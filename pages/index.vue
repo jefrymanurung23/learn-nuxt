@@ -31,7 +31,10 @@ export default {
   //   }
   // },
   computed: {
-    ...mapState(['videos', 'tags'])
+    ...mapState({
+      videos: state => state.videos.videos,
+      tags: state => state.tags.tags
+    })
   }
   // async asyncData ({ $axios }) {
   //   const response = await $axios.get('/videos')
