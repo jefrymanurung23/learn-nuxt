@@ -65,7 +65,24 @@ export default {
     extend (config, ctx) {
     }
   },
+
   server: {
     port: 8000
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/sessions', method: 'post', propertyName: 'token' },
+          logout: { url: '/sessions', method: 'delete' },
+          user: { url: '/sessions/user', method: 'get', propertyName: 'data.attributes' }
+        },
+        // tokenRequired: true,
+        tokenType: ''
+        // globalToken: true,
+        // autoFetchUser: true
+      }
+    }
   }
 }

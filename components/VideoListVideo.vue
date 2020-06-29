@@ -20,7 +20,7 @@
           </v-card-text>
           <v-card-actions>
             <div class="d-flex flex-wrap">
-              <span v-for="tag_id in video.tag_ids" :key="`${video.id}-${tag_id}`" class="mb-3">
+              <span v-for="tag_id in video.tag_ids" :key="`${tag_id}`" class="mb-3">
                 <v-btn
                   color="green lighten-2"
                   class="mr-2"

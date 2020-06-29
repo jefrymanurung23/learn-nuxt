@@ -4,15 +4,15 @@
       <v-btn text to="/">
         Home
       </v-btn>
-      <v-btn text to="/admin/videos">
+      <v-btn v-if="$auth.user.admin" text to="/admin/videos">
         Admin
       </v-btn>
 
       <v-spacer />
 
       <div v-if="$auth.loggedIn">
-        {{ $auth.user.email }}
-        <v-btn text>
+        {{ $auth.user.name }}
+        <v-btn text @click="$auth.logout()">
           Logout
         </v-btn>
       </div>
